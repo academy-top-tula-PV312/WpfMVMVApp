@@ -28,6 +28,39 @@ namespace WpfMVMVApp
             }
         }
 
+        private RelayCommand addCommand;
+        public RelayCommand AddCommand
+        {
+            get
+            {
+                return addCommand ?? (addCommand = new RelayCommand(
+                    _ =>
+                    {
+                        Flight flight = new Flight();
+                        Flights.Add(flight);
+                        SelectedFlight = flight;
+                    }));
+            }
+        }
+
+        private RelayCommand deleteCommand;
+        public RelayCommand DeleteCommand
+        {
+            get
+            {
+                return deleteCommand ?? (
+                    deleteCommand = new RelayCommand(
+                        obj =>
+                        {
+                            Flight flight = obj as Flight;
+                            if (flight != null)
+                                Flights.Remove(flight);
+                        },
+                        _ => Flights.Count > 0
+                        ));
+            }
+        }
+
         public ApplicationViewModel()
         {
             Flights = new ObservableCollection<Flight>()
@@ -35,8 +68,21 @@ namespace WpfMVMVApp
                 new Flight(){ Name = "AWE-124", 
                               ToCity = "Moscow", 
                               Date = DateTime.Now.AddDays(57), 
-                              Time = TimeSpan.FromHours(11.5),
-                              Image=""}
+                              Hours = 10,
+                              Minutes = 30,
+                              Image="air01.jpg"},
+                new Flight(){ Name = "TUR-002",
+                              ToCity = "Kazan",
+                              Date = DateTime.Now.AddDays(43),
+                              Hours = 20,
+                              Minutes = 15,
+                              Image="air02.jpg"},
+                new Flight(){ Name = "LKG-25",
+                              ToCity = "St.Peterburg",
+                              Date = DateTime.Now.AddDays(51),
+                              Hours = 12,
+                              Minutes = 00,
+                              Image="air03.jpg"}
             };
         }
 

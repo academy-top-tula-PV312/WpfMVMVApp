@@ -5,8 +5,105 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfMVMVApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="800" Width="1200">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="DarkGray"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Margin" Value="10, 5, 30, 15"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="Margin" Value="10, 5"/>
+            <Setter Property="Padding" Value="30"/>
+        </Style>
+        <local:DateTimeConverter x:Key="dateConverter"/>
+    </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Column="0"
+                 Grid.Row="0"
+                 ItemsSource="{Binding Flights}"
+                 SelectedItem="{Binding SelectedFlight, UpdateSourceTrigger=PropertyChanged}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Path=Image}" Width="100" Height="100" Stretch="Fill"/>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="40" 
+                                           Text="{Binding Path=Name}"
+                                           Margin="5, 10"/>
+                                <TextBlock FontSize="30"
+                                           Text="{Binding Path=ToCity}"
+                                           Margin="5, 10"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="26" 
+                                           Text="{Binding Path=Date, 
+                                                          Converter={StaticResource dateConverter}}"
+                                           Margin="5, 10"/>
+                                <!--<TextBlock FontSize="26" 
+                                           Text="{Binding Path=Time}"
+                                           Margin="5, 10"/>-->
+                                <TextBlock FontSize="26" 
+                                           Text="{Binding Path=Hours}"
+                                           Margin="5,10"/>
+                                <TextBlock FontSize="26" 
+                                           Text=":"
+                                           Margin="5,10"/>
+                                <TextBlock FontSize="26" 
+                                           Text="{Binding Path=Minutes}"
+                                           Margin="5,10"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Column="2"
+                    Grid.Row="0"
+                    DataContext="{Binding SelectedFlight}">
+            <TextBlock Text="Name"/>
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="To City"/>
+            <TextBox Text="{Binding ToCity, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Date"/>
+            <DatePicker SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="10, 5, 30, 15"/>
+            <TextBlock Text="Time"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                <TextBlock Text="Hrs"/>
+                <TextBox Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                <TextBlock Text="Mins"/>
+            </StackPanel>
+            
+        </StackPanel>
 
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    HorizontalAlignment="Center">
+            <Button Content="Add Flight"
+                    Command="{Binding AddCommand}"/>
+            <Button Content="Delete Flight"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding SelectedFlight}"/>
+        </StackPanel>
     </Grid>
 </Window>

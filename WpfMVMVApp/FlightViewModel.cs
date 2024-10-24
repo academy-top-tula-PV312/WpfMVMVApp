@@ -11,6 +11,7 @@ namespace WpfMVMVApp
     public class FlightViewModel : INotifyPropertyChanged
     {
         private Flight flight;
+        private TimeSpan time;
 
         public FlightViewModel(Flight flight)
         {
@@ -56,17 +57,31 @@ namespace WpfMVMVApp
             }
         }
 
+        public int Hours
+        {
+            get => flight.Hours;
+            set
+            {
+                flight.Hours = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Flight.Time));
+            }
+        }
+
+        public int Minutes
+        {
+            get => flight.Minutes;
+            set
+            {
+                flight.Minutes = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Flight.Time));
+            }
+        }
+
         public TimeSpan? Time
         {
             get => flight.Time;
-            set
-            {
-                if (flight.Time != value)
-                {
-                    flight.Time = value;
-                    OnPropertyChanged();
-                }
-            }
         }
 
         public string? Image
